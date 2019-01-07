@@ -1,8 +1,11 @@
 [tool.poetry]
 name = "file-replicator"
 version = "0.1.0"
-description = "Replicate files to another computer for remote development"
+license = "MIT"
 authors = ["Timothy Corbett-Clark <timothy.corbettclark@gmail.com>"]
+description = "Replicate files to another computer for remote development"
+readme = "README.md"
+long_description_content_type = "text/markdown"
 
 [tool.poetry.dependencies]
 python = "^3.6"
