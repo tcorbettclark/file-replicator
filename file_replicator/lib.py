@@ -43,9 +43,9 @@ done
 
 @contextlib.contextmanager
 def make_file_replicator(
-    src_dir, dest_parent_dir, connection_command, clean_out_first=False
+    src_dir, dest_parent_dir, bash_connection_command, clean_out_first=False
 ):
-    """Yield a copy_file(<filename>) function for copying files over ssh.
+    """Yield a copy_file(<filename>) function for copying files over a "bash connection".
 
     The <filename> must be in the given <src_dir>. The final path in the <src_dir>
     becomes the destination directory in the <dest_parent_dir>.
@@ -55,7 +55,7 @@ def make_file_replicator(
     dest_parent_dir = os.path.abspath(dest_parent_dir)
     destination_dir = os.path.join(dest_parent_dir, os.path.basename(src_dir))
 
-    p = subprocess.Popen(connection_command, stdin=subprocess.PIPE)
+    p = subprocess.Popen(bash_connection_command, stdin=subprocess.PIPE)
 
     # Get the remote end up and running, waiting for commands.
     if clean_out_first:
