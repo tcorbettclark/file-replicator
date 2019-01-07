@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "file-replicator"
+version = "0.1.0"
+description = "Replicate files to another computer for remote development"
+authors = ["Timothy Corbett-Clark <timothy.corbettclark@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.6"
+inotify = "^0.2.10"
+click = "^7.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^3.0"
+black = "=18.9b0"
+isort = "^4.3"
+
+[tool.poetry.scripts]
+file-replicator = "file_replicator.cli:main"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
