@@ -7,7 +7,7 @@ the files are edited with a copy of those files in a docker container running on
 
 Dependencies are:
 * Python and some Python packages on the development machine
-* Ability to run bash (including busybox) on the remote machine with connected `stdin`
+* Ability to run bash on the remote machine with connected `stdin`
 
 Nothing is installed remotely.
 
@@ -44,22 +44,67 @@ or docker container.
 
 See help:
 
-    TODO update help
+    Usage: file-replicator [OPTIONS] SRC_DIR DEST_PARENT_DIR
+                           [CONNECTION_COMMAND]...
 
-Replicate files from local directory `my_project` to directory `/home/code/my_project` on
-remote machine called `my.server.com`:
+      Replicate files to another computer e.g. for remote development.
 
-    file-replicator my_project /home/code ssh my.server.com bash
+      SRC_DIR is the source directory on this machine.
 
-To replicate files from local directory `my_project` to directory `/home/code/my_project` in a
-running docker container called `my_container` on a potentially remote host (depending upon the `DOCKER*`
-environment variables e.g. as set by `docker-machine eval`):
+      DEST_PARENT_DIR is the (absolute) destination parent directory on the
+      remote machine accessed using the CONNECTION_COMMAND.
 
-    file-replicator my_project /home/code -- docker exec -i my_container bash
+      The CONNECTION_COMMAND must result in a running instance of bash ready to
+      receive commands on stdin.
+
+      Example CONNECTION_COMMANDS include:
+
+          ssh some.host.com bash
+
+          docker exec -i my_container bash
+
+          docker-compose exec -T my_container bash
+
+      So a full use of the tool might look like:
+
+          file-replicator code_dir /home/code -- docker exec -i a_container bash
+
+      (the use of "--" prevents any further processing of command line arguments
+      by file-replicator, leaving them all for docker)
+
+      Initially, all files and required directories are recursively copied. Then
+      waits for changes before copying each modified or new file.
+
+      Note that empty directories are not replicated until they contain a file.
+
+      Lastly, the only time the tool deletes files or directories is if called
+      with the optional --clean-out-first switch.
+
+    Options:
+      --clean-out-first  Optionally start by cleaning out the destination
+                         directory.
+      --help             Show this message and exit.
+
+
+For example, to replicate files from local directory `my_project_dir` to directory
+`/home/code/my_project_dir` on remote machine called `my.server.com`:
+
+    file-replicator my_project_dir /home/code ssh my.server.com bash
+
+As another example, to replicate files from local directory `my_project_dir` to directory
+`/home/code/my_project_dir` in a running docker container called `my_container` on a potentially
+remote host (depending upon the `DOCKER*` environment variables e.g. as set by `docker-machine eval`):
+
+    file-replicator my_project_dir /home/code -- docker exec -i my_container bash
 
 Or to do the same but using `docker-compose` instead:
 
-    file-replicator my_project /home/code -- docker-compose exec -T my_container bash
+    file-replicator my_project_dir /home/code -- docker-compose exec -T my_container bash
+
+Lastly, as a degenerate example which doesn't actually connect to a remote machine at all
+but replicates into `/tmp/my_project_dir`:
+
+    file-replicator my_project_dir /tmp bash
 
 # Limitations
 
@@ -71,7 +116,7 @@ Information printed to stdout indicates when this happens.
 
 # Tests
 
-TODO copy and paste
+TODO copy and paste the output from the tests
 
 # Contributions
 
@@ -87,6 +132,7 @@ must be able to ssh to localhost without a password.
 # Commit checklist
 
 1. check version both in `pyproject.toml` and `file_replicator/__init__.py`
+1. check git tag
 1. isort -rc .
 1. black .
 1. pytest -v
@@ -97,4 +143,3 @@ must be able to ssh to localhost without a password.
 
 Add option to exclude certain files
 Add docs to show an example output. Possibly a screenshot so it looks nice.
-Publish on Pypi. (check copyright etc)
