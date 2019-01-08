@@ -32,14 +32,14 @@ def assert_file_contains(filename, text):
         assert f.read() == text
 
 
-def test_empty_directories_are_not_copied():
+def test_empty_directories_are_copied():
     with temp_directory() as src_parent_dir, temp_directory() as dest_parent_dir:
         src_dir = os.path.join(src_parent_dir, "test")
         os.makedirs(src_dir)
         with make_file_replicator(src_dir, dest_parent_dir, ("bash",)) as copy_file:
             pass
         assert list(os.listdir(src_dir)) == []
-        assert list(os.listdir(dest_parent_dir)) == []
+        assert list(os.listdir(dest_parent_dir)) == ["test"]
 
 
 def test_copy_one_file():
