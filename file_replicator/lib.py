@@ -77,7 +77,7 @@ def make_file_replicator(
         p.stdin.write(f"{size}\n".encode())
         with open(src_filename, "rb") as f:
             shutil.copyfileobj(f, p.stdin)
-        # p.stdin.flush()
+        p.stdin.flush()
 
     try:
         yield copy_file

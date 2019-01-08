@@ -103,7 +103,7 @@ Or to do the same but using `docker-compose` instead:
     file-replicator my_project_dir /home/code -- docker-compose exec -T my_container bash
 
 Lastly, as a degenerate example which doesn't actually connect to a remote machine at all
-but replicates into the locall `/tmp/my_project_dir`:
+but replicates into the local `/tmp/my_project_dir`:
 
     file-replicator my_project_dir /tmp bash
 

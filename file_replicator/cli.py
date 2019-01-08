@@ -41,8 +41,8 @@ def main(src_dir, dest_parent_dir, connection_command, clean_out_first):
     (the use of "--" prevents any further processing of command line arguments by
     file-replicator, leaving them all for docker)
 
-    Initially, all files and required directories are recursively copied. Then waits
-    for changes before copying each modified or new file.
+    Initially, all files and required directories are recursively copied. Then it
+    waits for changes before copying each modified or new file.
 
     Note that empty directories are not replicated until they contain a file.
 
