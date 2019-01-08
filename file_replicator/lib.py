@@ -11,7 +11,7 @@ __all__ = ["make_file_replicator", "replicate_all_files", "replicate_files_on_ch
 
 # Small receiver code (written in bash for minimum dependencies) which repeatadly reads
 # tar files from stdin and extracts them.
-# Note that this requires the full tar command, not busybox lightweight version.
+# Note that this requires the full tar command, not the busybox "lightweight" version.
 RECEIVER_CODE = """
 set -e
 if {clean_out_first}; then
