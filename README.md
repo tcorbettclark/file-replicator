@@ -155,8 +155,3 @@ It is tested using pytest (https://pytest.org).
 1. `pytest -v`
 1. update this README.md with the latest output from the tests
 1. update this README.md with the latest output from the --help option
-
-# TODO
-
-* Add an option to exclude certain files, e.g. a `.git` directory.
-* Add docs to show an example output. Possibly a screenshot so it looks nice.
