@@ -6,8 +6,9 @@ A key use-case is to keep in sync a directory of development files from a comput
 the files are edited with a copy of those files in a docker container running on a remote docker host.
 
 Dependencies are:
-* Python and some Python packages on the development machine
-* Ability to run bash on the remote machine with connected `stdin`
+* Python and some Python packages on the development machine.
+* Ability to run bash on the remote machine with connected `stdin`.
+* The tar utility (the full version, not the busybox version) on both machines.
 
 Nothing is installed remotely.
 
@@ -16,23 +17,18 @@ This has only been tested between two Linux machines.
 # How it works
 
 The approach is to run a small bash program on the remote end which is able to add/update new files in
-(potentially) new directories. It receives instructions over `stdin`, endlessly waiting for:
+(potentially) new directories. It receives these programs using the `tar` format.
 
-* an absolute path to a filename
-* a newline
-* an integer number of bytes
-* a newline
-* that many bytes of data
-* ...repeat...
+The controlling (source) end then simply sends files over to the `stdin` of the receiving bash
+program, which pipes them through `tar` to unpack them again.
 
-The controlling end then simply sends files over to the `stdin` of the receiving bash program.
 Establishing the connection to the remote end is outside the remit of this tool, but `file-replicator`
 requires as an argument the command to make such a connection. See examples below.
 
-Once a connection has been made, two operations occur:
+Once a connection has been made, two phases of operation occur:
 
-1. recursively walk a source tree of files and sending all of them over the wire to the destination
-2. watching for changes or new files and directories before sending them over the wire to the destination
+1. first, recursively walk a source tree of files and sending all of them over the wire to the destination
+2. then, watch for changes or new files and directories before sending them over the wire to the destination
 
 So there is no "difference algorithm" like rsync, no attempt to compress, the connection is made
 entirely using standard means like ssh and docker, no ports to open, and even the bash program
