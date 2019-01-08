@@ -26,7 +26,7 @@ The approach is to run a small bash program on the remote end which is able to a
 * ...repeat...
 
 The controlling end then simply sends files over to the `stdin` of the receiving bash program.
-Establishing the connection to the remote end is outside the remit of this tool. But `file-replicator`
+Establishing the connection to the remote end is outside the remit of this tool, but `file-replicator`
 requires as an argument the command to make such a connection. See examples below.
 
 Once a connection has been made, two operations occur:
