@@ -45,10 +45,12 @@ done
 def make_file_replicator(
     src_dir, dest_parent_dir, bash_connection_command, clean_out_first=False
 ):
-    """Yield a copy_file(<filename>) function for copying files over a "bash connection".
+    """Yield a copy_file(<filename>) function for replicating files over a "bash connection".
 
     The <filename> must be in the given <src_dir>. The final path in the <src_dir>
     becomes the destination directory in the <dest_parent_dir>.
+
+    The <bash_connection_command> must be a list.
 
     """
     src_dir = os.path.abspath(src_dir)
@@ -60,7 +62,7 @@ def make_file_replicator(
     # Get the remote end up and running, waiting for commands.
     if clean_out_first:
         # Only delete the *contents* of the destination directory so that the
-        # inode does not change.
+        # inode does not change (because that is irritating!).
         p.stdin.write(f"rm -rf {destination_dir}/*\n".encode())
     p.stdin.write(RECEIVER_CODE.encode())
     p.stdin.flush()
@@ -102,7 +104,7 @@ def replicate_files_on_change(src_dir, copy_file, timeout=None):
     when watching for file changes or additions and new directories are involved.
 
     Returns True to indicate that new directories have been added and the function should
-    be called again.
+    be called again. Otherwise returns None.
 
     """
     please_call_me_again = False
