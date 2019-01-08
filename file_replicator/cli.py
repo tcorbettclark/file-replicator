@@ -36,7 +36,7 @@ def main(src_dir, dest_parent_dir, connection_command, clean_out_first):
 
     So a full use of the tool might look like:
 
-        file-replicator code_dir /home/code -- docker exec -i a_container bash
+        file-replicator my_code_dir /home/code -- docker exec -i a_container bash
 
     (the use of "--" prevents any further processing of command line arguments by
     file-replicator, leaving them all for docker)

@@ -16,7 +16,8 @@ This has only been tested between two Linux machines.
 # How it works
 
 The approach is to run a small bash program on the remote end which is able to add/update new files in
-(potentially) new directories. It receives commands over `stdin`, endlessly waiting for:
+(potentially) new directories. It receives instructions over `stdin`, endlessly waiting for:
+
 * an absolute path to a filename
 * a newline
 * an integer number of bytes
@@ -25,12 +26,12 @@ The approach is to run a small bash program on the remote end which is able to a
 * ...repeat...
 
 The controlling end then simply sends files over to the `stdin` of the receiving bash program.
-Establishing the connection to the remote end is outside the remit of this tool. Instead it accepts
-as an argument the command to make such a connection. See examples below.
+Establishing the connection to the remote end is outside the remit of this tool. But `file-replicator`
+requires as an argument the command to make such a connection. See examples below.
 
-It has two key operations:
+Once a connection has been made, two operations occur:
 
-1. recursively walking a source tree of files and sending them over the wire to the destination
+1. recursively walk a source tree of files and sending all of them over the wire to the destination
 2. watching for changes or new files and directories before sending them over the wire to the destination
 
 So there is no "difference algorithm" like rsync, no attempt to compress, the connection is made
@@ -42,7 +43,7 @@ or docker container.
 
 # Usage and examples
 
-See help:
+See help with `file-replicate --help`:
 
     Usage: file-replicator [OPTIONS] SRC_DIR DEST_PARENT_DIR
                            [CONNECTION_COMMAND]...
@@ -67,7 +68,7 @@ See help:
 
       So a full use of the tool might look like:
 
-          file-replicator code_dir /home/code -- docker exec -i a_container bash
+          file-replicator my_code_dir /home/code -- docker exec -i a_container bash
 
       (the use of "--" prevents any further processing of command line arguments
       by file-replicator, leaving them all for docker)
@@ -102,9 +103,11 @@ Or to do the same but using `docker-compose` instead:
     file-replicator my_project_dir /home/code -- docker-compose exec -T my_container bash
 
 Lastly, as a degenerate example which doesn't actually connect to a remote machine at all
-but replicates into `/tmp/my_project_dir`:
+but replicates into the locall `/tmp/my_project_dir`:
 
     file-replicator my_project_dir /tmp bash
+
+The unit tests use this degenerate approach to test the tool.
 
 # Limitations
 
@@ -135,26 +138,25 @@ Information printed to stdout indicates when this happens.
 
 # Contributions
 
-Pull-requests welcome. Please considering including tests.
+Pull-requests are welcome! Please consider including tests and updating docs at the same time.
 
 The package is maintained using poetry (https://poetry.eustace.io) and pyenv (https://github.com/pyenv/pyenv).
 
-The code is formatted using black (https://black.readthedocs.io/en/stable).
+The code is formatted using black (https://black.readthedocs.io/en/stable) and isort (https://github.com/timothycrosley/isort).
 
-It is tested using pytest (`poetry run pytest`). Note that in order to run these tests the current user
-must be able to ssh to localhost without a password.
+It is tested using pytest (https://pytest.org).
 
 # Commit checklist
 
 1. check version both in `pyproject.toml` and `file_replicator/__init__.py`
-1. check git tag
-1. isort -rc .
-1. black .
-1. pytest -v
+1. `git tag`
+1. `isort -rc .`
+1. `black .`
+1. `pytest -v`
 1. update this README.md with the latest output from the tests
 1. update this README.md with the latest output from the --help option
 
 # TODO
 
-* Add option to exclude certain files
+* Add an option to exclude certain files, e.g. a `.git` directory.
 * Add docs to show an example output. Possibly a screenshot so it looks nice.
