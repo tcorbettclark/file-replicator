@@ -116,7 +116,22 @@ Information printed to stdout indicates when this happens.
 
 # Tests
 
-TODO copy and paste the output from the tests
+    ============================= test session starts ==============================
+    platform linux -- Python 3.6.7, pytest-3.10.1, py-1.7.0, pluggy-0.8.0 -- /home/tcorbettclark/.cache/pypoetry/virtualenvs/file-replicator-py3.6/bin/python
+    cachedir: .pytest_cache
+    rootdir: /home/tcorbettclark/code/file-replicator, inifile:
+    collecting ... collected 8 items
+
+    tests/test_lib.py::test_empty_directories_are_not_copied PASSED            [ 12%]
+    tests/test_lib.py::test_copy_one_file PASSED                               [ 25%]
+    tests/test_lib.py::test_copy_file_with_unusual_characters_in_name PASSED   [ 37%]
+    tests/test_lib.py::test_make_missing_parent_directories PASSED             [ 50%]
+    tests/test_lib.py::test_replicate_all_files PASSED                         [ 62%]
+    tests/test_lib.py::test_detect_and_copy_new_file PASSED                    [ 75%]
+    tests/test_lib.py::test_detect_and_copy_modified_file PASSED               [ 87%]
+    tests/test_lib.py::test_detect_and_copy_new_file_in_new_directories PASSED [100%]
+
+    =========================== 8 passed in 3.93 seconds ===========================
 
 # Contributions
 
@@ -141,5 +156,5 @@ must be able to ssh to localhost without a password.
 
 # TODO
 
-Add option to exclude certain files
-Add docs to show an example output. Possibly a screenshot so it looks nice.
+* Add option to exclude certain files
+* Add docs to show an example output. Possibly a screenshot so it looks nice.
