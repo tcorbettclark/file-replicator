@@ -104,7 +104,7 @@ def replicate_files_on_change(src_dir, copy_file, timeout=None):
     when watching for file changes or additions and new directories are involved.
 
     Returns True to indicate that new directories have been added and the function should
-    be called again. Otherwise returns None.
+    be called again. Otherwise returns False.
 
     """
     please_call_me_again = False
