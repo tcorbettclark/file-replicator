@@ -120,8 +120,7 @@ Information printed to stdout indicates when this happens.
     cachedir: .pytest_cache
     rootdir: /home/tcorbettclark/code/file-replicator, inifile:
     collecting ... collected 8 items
-
-    tests/test_lib.py::test_empty_directories_are_not_copied PASSED            [ 12%]
+    tests/test_lib.py::test_empty_directories_are_copied PASSED                [ 12%]
     tests/test_lib.py::test_copy_one_file PASSED                               [ 25%]
     tests/test_lib.py::test_copy_file_with_unusual_characters_in_name PASSED   [ 37%]
     tests/test_lib.py::test_make_missing_parent_directories PASSED             [ 50%]
@@ -129,8 +128,7 @@ Information printed to stdout indicates when this happens.
     tests/test_lib.py::test_detect_and_copy_new_file PASSED                    [ 75%]
     tests/test_lib.py::test_detect_and_copy_modified_file PASSED               [ 87%]
     tests/test_lib.py::test_detect_and_copy_new_file_in_new_directories PASSED [100%]
-
-    =========================== 8 passed in 3.93 seconds ===========================
+    =========================== 8 passed in 3.94 seconds ===========================
 
 # Contributions
 

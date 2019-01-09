@@ -15,7 +15,24 @@ from .lib import make_file_replicator, replicate_all_files, replicate_files_on_c
     default=False,
     help="Optionally start by cleaning out the destination directory.",
 )
-def main(src_dir, dest_parent_dir, connection_command, clean_out_first):
+@click.option(
+    "--with-initial-replication / --no-initial-replication",
+    default=True,
+    help="Perform (or not) an initial replication of all files.",
+)
+@click.option(
+    "--replicate-on-change / --no-replicate-on-change",
+    default=True,
+    help="Perform (or not) a wait-for-change-and-replicate cycle.",
+)
+def main(
+    src_dir,
+    dest_parent_dir,
+    connection_command,
+    clean_out_first,
+    with_initial_replication,
+    replicate_on_change,
+):
     """Replicate files to another computer e.g. for remote development.
 
     SRC_DIR is the source directory on this machine.
@@ -42,7 +59,8 @@ def main(src_dir, dest_parent_dir, connection_command, clean_out_first):
     file-replicator, leaving them all for docker)
 
     Initially, all files and required directories are recursively copied. Then it
-    waits for changes before copying each modified or new file.
+    waits for changes before copying each modified or new file. This can be modified
+    with the switches.
 
     Note that empty directories are not replicated until they contain a file.
 
@@ -69,10 +87,12 @@ def main(src_dir, dest_parent_dir, connection_command, clean_out_first):
     with make_file_replicator(
         src_dir, dest_parent_dir, connection_command, clean_out_first=clean_out_first
     ) as copy_file:
-        replicate_all_files(src_dir, copy_file)
-        while replicate_files_on_change(src_dir, copy_file):
-            click.secho(
-                "Restarting watchers after detecting a new directory. Consider restarting!",
-                fg="red",
-                bold="true",
-            )
+        if with_initial_replication:
+            replicate_all_files(src_dir, copy_file)
+        if replicate_on_change:
+            while replicate_files_on_change(src_dir, copy_file):
+                click.secho(
+                    "Restarting watchers after detecting a new directory. Consider restarting!",
+                    fg="red",
+                    bold="true",
+                )
