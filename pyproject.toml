@@ -6,6 +6,7 @@ authors = ["Timothy Corbett-Clark <timothy.corbettclark@gmail.com>"]
 description = "Replicate files to another computer for remote development"
 readme = "README.md"
 long_description_content_type = "text/markdown"
+keywords = ["development", "copying", "replication", "synchronisation", "files"]
 
 [tool.poetry.dependencies]
 python = "^3.6"
