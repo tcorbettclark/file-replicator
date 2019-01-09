@@ -7,6 +7,7 @@ description = "Replicate files to another computer for remote development"
 readme = "README.md"
 long_description_content_type = "text/markdown"
 keywords = ["development", "copying", "replication", "synchronisation", "sync", "files"]
+homepage = "https://github.com/tcorbettclark/file-replicator"
 
 [tool.poetry.dependencies]
 python = "^3.6"
