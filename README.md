@@ -12,7 +12,7 @@ Dependencies are:
 
 Nothing is installed remotely.
 
-This has only been tested between two Linux machines.
+Tested and known to work between two Linux machines. Support for developing on macOS coming...
 
 # How it works
 
@@ -70,7 +70,8 @@ See help with `file-replicate --help`:
       by file-replicator, leaving them all for docker)
 
       Initially, all files and required directories are recursively copied. Then
-      waits for changes before copying each modified or new file.
+      it waits for changes before copying each modified or new file. This can be
+      modified with the switches.
 
       Note that empty directories are not replicated until they contain a file.
 
@@ -78,10 +79,16 @@ See help with `file-replicate --help`:
       with the optional --clean-out-first switch.
 
     Options:
-      --clean-out-first  Optionally start by cleaning out the destination
-                         directory.
-      --help             Show this message and exit.
-
+      --clean-out-first               Optionally start by cleaning out the
+                                      destination directory.
+      --with-initial-replication / --no-initial-replication
+                                      Perform (or not) an initial replication of
+                                      all files.
+      --replicate-on-change / --no-replicate-on-change
+                                      Perform (or not) a wait-for-change-and-
+                                      replicate cycle.
+      --version                       Show the version and exit.
+      --help                          Show this message and exit.
 
 For example, to replicate files from local directory `my_project_dir` to directory
 `/home/code/my_project_dir` on remote machine called `my.server.com`:

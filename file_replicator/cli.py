@@ -2,8 +2,9 @@ import os.path
 
 import click
 
-from .lib import make_file_replicator, replicate_all_files, replicate_files_on_change
 import file_replicator
+
+from .lib import make_file_replicator, replicate_all_files, replicate_files_on_change
 
 
 @click.command()
