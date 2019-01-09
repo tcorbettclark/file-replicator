@@ -116,7 +116,7 @@ The unit tests use this degenerate approach to test the tool.
 
 Due to limitations with inotify (race conditions around watching for changes in newly created directories), it
 is possible that the watching-for-changes phase becomes out of step. In which case, just restart the whole program.
-(the tool includes some self-restarting behaviour, but ultimately a full restart may sometimes be needed).
+The tool includes some self-restarting behaviour, but ultimately a full restart may sometimes be needed.
 
 Information printed to stdout indicates when this happens.
 
