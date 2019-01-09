@@ -3,6 +3,7 @@ import os.path
 import click
 
 from .lib import make_file_replicator, replicate_all_files, replicate_files_on_change
+import file_replicator
 
 
 @click.command()
@@ -25,6 +26,7 @@ from .lib import make_file_replicator, replicate_all_files, replicate_files_on_c
     default=True,
     help="Perform (or not) a wait-for-change-and-replicate cycle.",
 )
+@click.version_option(version=file_replicator.__version__)
 def main(
     src_dir,
     dest_parent_dir,
