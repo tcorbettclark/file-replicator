@@ -53,15 +53,23 @@ def make_file_replicator(
 
     def copy_file(src_filename):
         src_filename = os.path.abspath(src_filename)
-        assert src_filename.startswith(src_dir), src_filename + "    " + src_dir
-        assert os.path.isfile(src_filename)
+        # For debugging...
+        # assert src_filename.startswith(src_dir), src_filename + " does not start with " + src_dir
+        # assert os.path.isfile(src_filename), src_filename
         rel_src_filename = os.path.join(src_filename[(1 + len(src_dir)) :])
-        subprocess.run(
-            ["tar", "--create", rel_src_filename, "--to-stdout"],
+        result = subprocess.run(
+            ["tar", "--create", rel_src_filename, "--to-stdout", "--ignore-failed-read"],
             cwd=src_dir,
             check=True,
             stdout=p.stdin,
+            stderr=subprocess.PIPE,
         )
+        if result.stderr:
+            if "No such file or directory" in result.stderr.decode():
+                # Ignore because file was removed before we had a chance to copy it.
+                pass
+            else:
+                raise RuntimeError(f"ERROR: {result.stderr.decode()}")
         p.stdin.flush()
 
     try:
