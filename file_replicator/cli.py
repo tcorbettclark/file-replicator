@@ -27,6 +27,11 @@ from .lib import make_file_replicator, replicate_all_files, replicate_files_on_c
     default=True,
     help="Perform (or not) a wait-for-change-and-replicate cycle.",
 )
+@click.option(
+    "--gitignore / --no-gitignore",
+    default=True,
+    help="Use .gitignore (or not) to filter files.",
+)
 @click.version_option(version=file_replicator.__version__)
 def main(
     src_dir,
@@ -35,6 +40,7 @@ def main(
     clean_out_first,
     with_initial_replication,
     replicate_on_change,
+    gitignore,
 ):
     """Replicate files to another computer e.g. for remote development.
 
@@ -91,9 +97,11 @@ def main(
         src_dir, dest_parent_dir, connection_command, clean_out_first=clean_out_first
     ) as copy_file:
         if with_initial_replication:
-            replicate_all_files(src_dir, copy_file)
+            replicate_all_files(src_dir, copy_file, use_gitignore=gitignore)
         if replicate_on_change:
-            while replicate_files_on_change(src_dir, copy_file):
+            while replicate_files_on_change(
+                src_dir, copy_file, use_gitignore=gitignore
+            ):
                 click.secho(
                     "Restarting watchers after detecting a new directory. Consider restarting!",
                     fg="red",

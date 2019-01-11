@@ -13,6 +13,7 @@ homepage = "https://github.com/tcorbettclark/file-replicator"
 python = "^3.6"
 inotify = "^0.2.10"
 click = "^7.0"
+pathspec = "^0.5.9"
 
 [tool.poetry.dev-dependencies]
 pytest = "^3.0"

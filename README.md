@@ -81,7 +81,8 @@ See help with `file-replicate --help`:
 
       So a full use of the tool might look like:
 
-          file-replicator my_code_dir /home/code -- docker exec -i a_container bash
+          file-replicator my_code_dir /home/code -- docker exec -i a_container
+          bash
 
       (the use of "--" prevents any further processing of command line arguments
       by file-replicator, leaving them all for docker)
@@ -104,6 +105,7 @@ See help with `file-replicate --help`:
       --replicate-on-change / --no-replicate-on-change
                                       Perform (or not) a wait-for-change-and-
                                       replicate cycle.
+      --gitignore / --no-gitignore    Use .gitignore (or not) to filter files.
       --version                       Show the version and exit.
       --help                          Show this message and exit.
 
@@ -152,7 +154,7 @@ Information printed to stdout indicates when this happens.
     tests/test_lib.py::test_detect_and_copy_new_file PASSED                    [ 75%]
     tests/test_lib.py::test_detect_and_copy_modified_file PASSED               [ 87%]
     tests/test_lib.py::test_detect_and_copy_new_file_in_new_directories PASSED [100%]
-    =========================== 8 passed in 3.94 seconds ===========================
+    =========================== 8 passed in 3.98 seconds ===========================
 
 # Contributions
 

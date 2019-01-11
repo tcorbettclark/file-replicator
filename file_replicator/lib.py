@@ -5,6 +5,7 @@ import subprocess
 import time
 
 import inotify.adapters
+import pathspec
 
 __all__ = ["make_file_replicator", "replicate_all_files", "replicate_files_on_change"]
 
@@ -52,7 +53,7 @@ def make_file_replicator(
 
     def copy_file(src_filename):
         src_filename = os.path.abspath(src_filename)
-        assert src_filename.startswith(src_dir), src_filename
+        assert src_filename.startswith(src_dir), src_filename + "    " + src_dir
         assert os.path.isfile(src_filename)
         rel_src_filename = os.path.join(src_filename[(1 + len(src_dir)) :])
         subprocess.run(
@@ -70,14 +71,25 @@ def make_file_replicator(
         p.wait()
 
 
-def replicate_all_files(src_dir, copy_file):
+def get_pathspec(src_dir, use_gitignore=True):
+    gitignore_filename = os.path.join(src_dir, ".gitignore")
+    if use_gitignore and os.path.isfile(gitignore_filename):
+        with open(gitignore_filename) as f:
+            spec = pathspec.PathSpec.from_lines("gitwildmatch", f)
+    else:
+        spec = pathspec.PathSpec.from_lines("gitwildmatch", [])
+    return spec
+
+
+def replicate_all_files(src_dir, copy_file, use_gitignore=True):
     """Walk src_dir to copy all files using copy_file()."""
-    for root, dirnames, filenames in os.walk(src_dir):
-        for filename in filenames:
-            copy_file(os.path.join(root, filename))
+    spec = get_pathspec(src_dir, use_gitignore)
+    for filename in pathspec.util.iter_tree(src_dir):
+        if not spec.match_file(filename):
+            copy_file(os.path.join(src_dir, filename))
 
 
-def replicate_files_on_change(src_dir, copy_file, timeout=None):
+def replicate_files_on_change(src_dir, copy_file, timeout=None, use_gitignore=True):
     """Wait for changes to files in src_dir and copy with copy_file().
 
     If provided, the timeout indicates when to return after that many seconds of no change.
@@ -91,20 +103,22 @@ def replicate_files_on_change(src_dir, copy_file, timeout=None):
     """
     please_call_me_again = False
     i = inotify.adapters.InotifyTree(src_dir)
+    spec = get_pathspec(src_dir, use_gitignore)
     for event in i.event_gen(yield_nones=False, timeout_s=timeout):
         (_, type_names, path, filename) = event
         # For debugging...
         # print(
         #     "PATH=[{}] FILENAME=[{}] EVENT_TYPES={}".format(path, filename, type_names)
         # )
-        if "IN_CLOSE_WRITE" in type_names:
-            copy_file(os.path.join(path, filename))
-        if "IN_CREATE" in type_names and "IN_ISDIR" in type_names:
-            # Race condition danger because a new directory was created (see warning on https://pypi.org/project/inotify).
-            # Wait a short while for things to settle, then replicate the new directory, then start the watchers again.
-            time.sleep(0.5)
-            new_directory = os.path.join(path, filename)
-            replicate_all_files(new_directory, copy_file)
-            please_call_me_again = True
-            break
+        if not spec.match_file(filename):
+            if "IN_CLOSE_WRITE" in type_names:
+                copy_file(os.path.join(path, filename))
+            if "IN_CREATE" in type_names and "IN_ISDIR" in type_names:
+                # Race condition danger because a new directory was created (see warning on https://pypi.org/project/inotify).
+                # Wait a short while for things to settle, then replicate the new directory, then start the watchers again.
+                time.sleep(0.5)
+                new_directory = os.path.join(path, filename)
+                replicate_all_files(new_directory, copy_file)
+                please_call_me_again = True
+                break
     return please_call_me_again
