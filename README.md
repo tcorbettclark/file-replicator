@@ -106,8 +106,10 @@ See help with `file-replicate --help`:
                                       Perform (or not) a wait-for-change-and-
                                       replicate cycle.
       --gitignore / --no-gitignore    Use .gitignore (or not) to filter files.
+      --debugging                     Print debugging information.
       --version                       Show the version and exit.
       --help                          Show this message and exit.
+
 
 For example, to replicate files from local directory `my_project_dir` to directory
 `/home/code/my_project_dir` on remote machine called `my.server.com`:
@@ -146,15 +148,15 @@ Information printed to stdout indicates when this happens.
     cachedir: .pytest_cache
     rootdir: /home/tcorbettclark/code/file-replicator, inifile:
     collecting ... collected 8 items
-    tests/test_lib.py::test_empty_directories_are_copied PASSED                [ 12%]
-    tests/test_lib.py::test_copy_one_file PASSED                               [ 25%]
-    tests/test_lib.py::test_copy_file_with_unusual_characters_in_name PASSED   [ 37%]
-    tests/test_lib.py::test_make_missing_parent_directories PASSED             [ 50%]
-    tests/test_lib.py::test_replicate_all_files PASSED                         [ 62%]
-    tests/test_lib.py::test_detect_and_copy_new_file PASSED                    [ 75%]
-    tests/test_lib.py::test_detect_and_copy_modified_file PASSED               [ 87%]
+    tests/test_lib.py::test_empty_directories_are_copied PASSED              [ 12%]
+    tests/test_lib.py::test_copy_one_file PASSED                             [ 25%]
+    tests/test_lib.py::test_copy_file_with_unusual_characters_in_name PASSED [ 37%]
+    tests/test_lib.py::test_make_missing_parent_directories PASSED           [ 50%]
+    tests/test_lib.py::test_replicate_all_files PASSED                       [ 62%]
+    tests/test_lib.py::test_detect_and_copy_new_file PASSED                  [ 75%]
+    tests/test_lib.py::test_detect_and_copy_modified_file PASSED             [ 87%]
     tests/test_lib.py::test_detect_and_copy_new_file_in_new_directories PASSED [100%]
-    =========================== 8 passed in 3.98 seconds ===========================
+    =========================== 8 passed in 3.95 seconds ===========================
 
 # Contributions
 
