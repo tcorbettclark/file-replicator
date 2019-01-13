@@ -43,12 +43,12 @@ requires as an argument the command to make such a connection. See examples belo
 
 Once a connection has been made, two phases of operation occur:
 
-1. first, recursively walk a source tree of files and sending all of them over the wire to the destination
-2. then, watch for changes or new files and directories before sending them over the wire to the destination
+1. first, recursively walk a source tree of files and send them "over the wire" to the destination
+2. then, watch for changes or new files and directories before sending them "over the wire" to the destination
 
 So there is no "difference algorithm" like rsync, no attempt to compress (although of course the connection
 could already be compressing e.g. if over ssh), the connection is made entirely using standard means like
-ssh and docker, no ports to open, and even the bash program on the remote end is sent over every time
+ssh and docker, there are no ports to open, and even the bash program on the remote end is sent over every time
 so nothing is installed remotely.
 
 This is sufficient for editing code on a local computer and automatically replicating them to a
@@ -170,10 +170,11 @@ It is tested using pytest (https://pytest.org).
 
 # Commit checklist
 
-1. check version both in `pyproject.toml` and `file_replicator/__init__.py`
-1. `git tag`
 1. `isort -rc .`
 1. `black .`
 1. `pytest -v`
+1. clock version in `pyproject.toml`
+1. clock version in `file_replicator/__init__.py`
+1. `git tag`
 1. update this README.md with the latest output from the tests
 1. update this README.md with the latest output from the --help option

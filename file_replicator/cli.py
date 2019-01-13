@@ -56,7 +56,7 @@ def main(
     The CONNECTION_COMMAND must result in a running instance of bash ready to receive commands
     on stdin.
 
-    Example CONNECTION_COMMANDS include:
+    Example CONNECTION_COMMANDs include:
 
         ssh some.host.com bash
 
