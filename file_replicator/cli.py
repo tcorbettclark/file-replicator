@@ -4,7 +4,7 @@ import click
 
 import file_replicator
 
-from .lib import make_file_replicator, replicate_all_files, replicate_files_on_change
+from .lib import Replicator, replicate_all_files, replicate_files_on_change
 
 
 @click.command()
@@ -53,8 +53,8 @@ def main(
     DEST_PARENT_DIR is the (absolute) destination parent directory on the
     remote machine accessed using the CONNECTION_COMMAND.
 
-    The CONNECTION_COMMAND must result in a running instance of bash ready to receive commands
-    on stdin.
+    The CONNECTION_COMMAND must result in a running instance of bash ready to receive
+    commands on stdin.
 
     Example CONNECTION_COMMANDs include:
 
@@ -72,13 +72,10 @@ def main(
     file-replicator, leaving them all for docker)
 
     Initially, all files and required directories are recursively copied. Then it
-    waits for changes before copying each modified or new file. This can be modified
-    with the switches.
+    waits for changes before copying each modified or new file (and deleting files
+    and directories). This can be modified with the switches.
 
     Note that empty directories are not replicated until they contain a file.
-
-    Lastly, the only time the tool deletes files or directories is if called with
-    the optional --clean-out-first switch.
 
     """
     if not connection_command:
@@ -97,23 +94,24 @@ def main(
             "Clearing out all destination files first!", fg="green", bold="true"
         )
 
-    with make_file_replicator(
+    with Replicator(
         src_dir,
         dest_parent_dir,
         connection_command,
         clean_out_first=clean_out_first,
         debugging=debugging,
-    ) as copy_file:
+    ) as replicator:
         if with_initial_replication:
             replicate_all_files(
-                src_dir, copy_file, use_gitignore=gitignore, debugging=debugging
+                src_dir, replicator, use_gitignore=gitignore, debugging=debugging
             )
         if replicate_on_change:
             while replicate_files_on_change(
-                src_dir, copy_file, use_gitignore=gitignore, debugging=debugging
+                src_dir, replicator, use_gitignore=gitignore, debugging=debugging
             ):
                 click.secho(
-                    "Restarting watchers after detecting a new directory. Consider restarting!",
+                    "Restarting watchers after detecting a new or removed directory. "
+                    "Consider restarting!",
                     fg="red",
                     bold="true",
                 )

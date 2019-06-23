@@ -58,58 +58,53 @@ remote server or docker container whenever a file is created or modified.
 
 See help with `file-replicate --help`:
 
-    Usage: file-replicator [OPTIONS] SRC_DIR DEST_PARENT_DIR
+    Usage: file-replicator [OPTIONS] SRC_DIR DEST_PARENT_DIR \
                            [CONNECTION_COMMAND]...
 
-      Replicate files to another computer e.g. for remote development.
+    Replicate files to another computer e.g. for remote development.
 
-      SRC_DIR is the source directory on this machine.
+    SRC_DIR is the source directory on this machine.
 
-      DEST_PARENT_DIR is the (absolute) destination parent directory on the
-      remote machine accessed using the CONNECTION_COMMAND.
+    DEST_PARENT_DIR is the (absolute) destination parent directory on the
+    remote machine accessed using the CONNECTION_COMMAND.
 
-      The CONNECTION_COMMAND must result in a running instance of bash ready to
-      receive commands on stdin.
+    The CONNECTION_COMMAND must result in a running instance of bash ready to
+    receive commands on stdin.
 
-      Example CONNECTION_COMMANDS include:
+    Example CONNECTION_COMMANDs include:
 
-          ssh some.host.com bash
+        ssh some.host.com bash
 
-          docker exec -i my_container bash
+        docker exec -i my_container bash
 
-          docker-compose exec -T my_container bash
+        docker-compose exec -T my_container bash
 
-      So a full use of the tool might look like:
+    So a full use of the tool might look like:
 
-          file-replicator my_code_dir /home/code -- docker exec -i a_container
-          bash
+        file-replicator my_code_dir /home/code -- docker exec -i a_container bash
 
-      (the use of "--" prevents any further processing of command line arguments
-      by file-replicator, leaving them all for docker)
+    (the use of "--" prevents any further processing of command line arguments
+    by file-replicator, leaving them all for docker)
 
-      Initially, all files and required directories are recursively copied. Then
-      it waits for changes before copying each modified or new file. This can be
-      modified with the switches.
+    Initially, all files and required directories are recursively copied. Then
+    it waits for changes before copying each modified or new file. This can be
+    modified with the switches.
 
-      Note that empty directories are not replicated until they contain a file.
-
-      Lastly, the only time the tool deletes files or directories is if called
-      with the optional --clean-out-first switch.
+    Note that empty directories are not replicated until they contain a file.
 
     Options:
-      --clean-out-first               Optionally start by cleaning out the
-                                      destination directory.
-      --with-initial-replication / --no-initial-replication
-                                      Perform (or not) an initial replication of
-                                      all files.
-      --replicate-on-change / --no-replicate-on-change
-                                      Perform (or not) a wait-for-change-and-
-                                      replicate cycle.
-      --gitignore / --no-gitignore    Use .gitignore (or not) to filter files.
-      --debugging                     Print debugging information.
-      --version                       Show the version and exit.
-      --help                          Show this message and exit.
-
+    --clean-out-first               Optionally start by cleaning out the
+                                    destination directory.
+    --with-initial-replication / --no-initial-replication
+                                    Perform (or not) an initial replication of
+                                    all files.
+    --replicate-on-change / --no-replicate-on-change
+                                    Perform (or not) a wait-for-change-and-
+                                    replicate cycle.
+    --gitignore / --no-gitignore    Use .gitignore (or not) to filter files.
+    --debugging                     Print debugging information.
+    --version                       Show the version and exit.
+    --help                          Show this message and exit.
 
 For example, to replicate files from local directory `my_project_dir` to directory
 `/home/code/my_project_dir` on remote machine called `my.server.com`:
@@ -144,19 +139,21 @@ Information printed to stdout indicates when this happens.
 # Tests
 
     ============================= test session starts ==============================
-    platform linux -- Python 3.6.7, pytest-3.10.1, py-1.7.0, pluggy-0.8.0 -- /home/tcorbettclark/.cache/pypoetry/virtualenvs/file-replicator-py3.6/bin/python
+    platform linux -- Python 3.6.7, pytest-3.10.1, py-1.8.0, pluggy-0.12.0 -- /home/tcorbettclark/.cache/pypoetry/virtualenvs/file-replicator-py3.6/bin/python
     cachedir: .pytest_cache
     rootdir: /home/tcorbettclark/code/file-replicator, inifile:
     collecting ... collected 8 items
-    tests/test_lib.py::test_empty_directories_are_copied PASSED              [ 12%]
-    tests/test_lib.py::test_copy_one_file PASSED                             [ 25%]
-    tests/test_lib.py::test_copy_file_with_unusual_characters_in_name PASSED [ 37%]
-    tests/test_lib.py::test_make_missing_parent_directories PASSED           [ 50%]
-    tests/test_lib.py::test_replicate_all_files PASSED                       [ 62%]
-    tests/test_lib.py::test_detect_and_copy_new_file PASSED                  [ 75%]
-    tests/test_lib.py::test_detect_and_copy_modified_file PASSED             [ 87%]
+
+    tests/test_lib.py::test_empty_directories_are_copied PASSED                [ 12%]
+    tests/test_lib.py::test_copy_one_file PASSED                               [ 25%]
+    tests/test_lib.py::test_copy_file_with_unusual_characters_in_name PASSED   [ 37%]
+    tests/test_lib.py::test_make_missing_parent_directories PASSED             [ 50%]
+    tests/test_lib.py::test_replicate_all_files PASSED                         [ 62%]
+    tests/test_lib.py::test_detect_and_copy_new_file PASSED                    [ 75%]
+    tests/test_lib.py::test_detect_and_copy_modified_file PASSED               [ 87%]
     tests/test_lib.py::test_detect_and_copy_new_file_in_new_directories PASSED [100%]
-    =========================== 8 passed in 3.95 seconds ===========================
+
+    =========================== 8 passed in 4.00 seconds ===========================
 
 # Contributions
 
