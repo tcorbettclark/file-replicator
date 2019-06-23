@@ -98,7 +98,11 @@ def main(
         )
 
     with make_file_replicator(
-        src_dir, dest_parent_dir, connection_command, clean_out_first=clean_out_first, debugging=debugging
+        src_dir,
+        dest_parent_dir,
+        connection_command,
+        clean_out_first=clean_out_first,
+        debugging=debugging,
     ) as copy_file:
         if with_initial_replication:
             replicate_all_files(
