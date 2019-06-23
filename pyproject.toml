@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "file-replicator"
-version = "0.1.10"
+version = "0.1.11"
 license = "MIT"
 authors = ["Timothy Corbett-Clark <timothy.corbettclark@gmail.com>"]
 description = "Replicate files to another computer for remote development"
