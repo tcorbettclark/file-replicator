@@ -58,8 +58,8 @@ remote server or docker container whenever a file is created or modified.
 
 See help with `file-replicate --help`:
 
-    Usage: file-replicator [OPTIONS] SRC_DIR DEST_PARENT_DIR
-                        [CONNECTION_COMMAND]...
+    Usage: file-replicator [OPTIONS] SRC_DIR DEST_PARENT_DIR \
+                           [CONNECTION_COMMAND]...
 
     Replicate files to another computer e.g. for remote development.
 
@@ -81,8 +81,7 @@ See help with `file-replicate --help`:
 
     So a full use of the tool might look like:
 
-        file-replicator my_code_dir /home/code -- docker exec -i a_container
-        bash
+        file-replicator my_code_dir /home/code -- docker exec -i a_container bash
 
     (the use of "--" prevents any further processing of command line arguments
     by file-replicator, leaving them all for docker)
@@ -92,9 +91,6 @@ See help with `file-replicate --help`:
     modified with the switches.
 
     Note that empty directories are not replicated until they contain a file.
-
-    Lastly, the only time the tool deletes files or directories is if called
-    with the optional --clean-out-first switch.
 
     Options:
     --clean-out-first               Optionally start by cleaning out the
@@ -142,22 +138,22 @@ Information printed to stdout indicates when this happens.
 
 # Tests
 
-============================= test session starts ==============================
-platform linux -- Python 3.6.7, pytest-3.10.1, py-1.8.0, pluggy-0.12.0 -- /home/tcorbettclark/.cache/pypoetry/virtualenvs/file-replicator-py3.6/bin/python
-cachedir: .pytest_cache
-rootdir: /home/tcorbettclark/code/file-replicator, inifile:
-collecting ... collected 8 items
+    ============================= test session starts ==============================
+    platform linux -- Python 3.6.7, pytest-3.10.1, py-1.8.0, pluggy-0.12.0 -- /home/tcorbettclark/.cache/pypoetry/virtualenvs/file-replicator-py3.6/bin/python
+    cachedir: .pytest_cache
+    rootdir: /home/tcorbettclark/code/file-replicator, inifile:
+    collecting ... collected 8 items
 
-tests/test_lib.py::test_empty_directories_are_copied PASSED              [ 12%]
-tests/test_lib.py::test_copy_one_file PASSED                             [ 25%]
-tests/test_lib.py::test_copy_file_with_unusual_characters_in_name PASSED [ 37%]
-tests/test_lib.py::test_make_missing_parent_directories PASSED           [ 50%]
-tests/test_lib.py::test_replicate_all_files PASSED                       [ 62%]
-tests/test_lib.py::test_detect_and_copy_new_file PASSED                  [ 75%]
-tests/test_lib.py::test_detect_and_copy_modified_file PASSED             [ 87%]
-tests/test_lib.py::test_detect_and_copy_new_file_in_new_directories PASSED [100%]
+    tests/test_lib.py::test_empty_directories_are_copied PASSED                [ 12%]
+    tests/test_lib.py::test_copy_one_file PASSED                               [ 25%]
+    tests/test_lib.py::test_copy_file_with_unusual_characters_in_name PASSED   [ 37%]
+    tests/test_lib.py::test_make_missing_parent_directories PASSED             [ 50%]
+    tests/test_lib.py::test_replicate_all_files PASSED                         [ 62%]
+    tests/test_lib.py::test_detect_and_copy_new_file PASSED                    [ 75%]
+    tests/test_lib.py::test_detect_and_copy_modified_file PASSED               [ 87%]
+    tests/test_lib.py::test_detect_and_copy_new_file_in_new_directories PASSED [100%]
 
-=========================== 8 passed in 4.00 seconds ===========================
+    =========================== 8 passed in 4.00 seconds ===========================
 
 # Contributions
 

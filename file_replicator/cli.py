@@ -72,13 +72,10 @@ def main(
     file-replicator, leaving them all for docker)
 
     Initially, all files and required directories are recursively copied. Then it
-    waits for changes before copying each modified or new file. This can be modified
-    with the switches.
+    waits for changes before copying each modified or new file (and deleting files
+    and directories). This can be modified with the switches.
 
     Note that empty directories are not replicated until they contain a file.
-
-    Lastly, the only time the tool deletes files or directories is if called with
-    the optional --clean-out-first switch.
 
     """
     if not connection_command:
