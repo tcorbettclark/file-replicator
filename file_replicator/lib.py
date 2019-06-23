@@ -1,6 +1,5 @@
 import contextlib
 import os.path
-import shutil
 import subprocess
 import time
 
@@ -46,7 +45,9 @@ def make_file_replicator(
     dest_parent_dir = os.path.abspath(dest_parent_dir)
     dest_dir = os.path.join(dest_parent_dir, os.path.basename(src_dir))
 
-    p = subprocess.Popen(bash_connection_command, stdin=subprocess.PIPE)
+    p = subprocess.Popen(
+        bash_connection_command, stdin=subprocess.PIPE, stderr=subprocess.PIPE
+    )
 
     # Get the remote end up and running waiting for tar files.
     receiver_code = RECEIVER_CODE.format(
@@ -71,7 +72,6 @@ def make_file_replicator(
             cwd=src_dir,
             check=True,
             stdout=p.stdin,
-            stderr=subprocess.PIPE,
         )
         if result.stderr:
             if "No such file or directory" in result.stderr.decode():
@@ -85,6 +85,14 @@ def make_file_replicator(
         yield copy_file
     finally:
         p.stdin.close()
+        any_errors = p.stderr.read().decode("ASCII").strip()
+        if any_errors and any_errors != (
+            "tar: This does not look like a tar archive\n"
+            "tar: Exiting with failure status due to previous errors"
+        ):
+            # We expect to see the above error message from tar when closing stdin
+            # and waiting for the receiver_code to finish. If we don't then fail.
+            raise RuntimeError(f"Unexpected error from tar:\n{any_errors}")
         p.wait()
 
 
